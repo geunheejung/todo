@@ -1,0 +1,36 @@
+.wrap {
+  position: relative;
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.wrap .todo-wrap {
+  height: 500px;
+  padding: 0 40px;
+  border: 3px solid #000;
+  background: linen;
+}
+
+.todo-header {
+  margin: 20px 0 0 0;
+  font-weight: bold;
+  font-size: 30px;
+  border-bottom: 3px solid #000;
+}
+
+.todo-btn-wrap {
+  position: absolute;
+  right: 10px;
+  bottom: 0px;
+  
+  height: 60px; 
+}
+
+.todo-btn-wrap .create-todo {
+  padding: 10px;
+  border: 3px solid #fff;
+  border-radius: 5px;
+  background: none;
+  font-size: 13px;
+}
