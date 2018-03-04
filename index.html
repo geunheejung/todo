@@ -16,14 +16,25 @@
       </header>
       <article class="todo-list-wrap">
         <ul class="todo-list">
-          
         </ul>
       </article>
     </section>
     <section class="todo-btn-wrap">
       <button class="create-todo">Create Todo</button>
+      <button class="change-mode-todo">Change Mode</button>
+      <div class="create-todo-pop">
+        <div class="close-create-pop">X</div>
+        <form action="" class="create-todo-form">
+          <fieldset>
+            <legend class="create-todo-title">TODO 작성!</legend>
+              <label>Title</label>
+              <input type="text" size="20" max="20">
+              <input type="submit">
+          </fieldset>
+        </form>
+      </div>
     </section>
   </div>
-  <script src="./js/todo.js" />
+  <script src="./js/todo.js"></script>
 </body>
 </html>
