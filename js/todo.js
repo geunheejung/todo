@@ -1,40 +1,25 @@
-const todoInit = (() => {
-  let id = 0;
+const todo = (() => {  
   let todoList = {};
   const STATE_P = 'progress';
   const STATE_C = 'success';
-
-  const init = () => {
+  const warning = (text) => console.log(text);
+  
+  const init = (mode) => {
     console.group('TODO 명령어 모음');
-    console.log('--- add ( "내용" )');
-    console.log('--- remove ( id )');
-    console.log('--- edit ( id, "내용" )');
-    console.log('--- change ( id )');
-    console.groupEnd();
-    console.group('현재 TODO 상태');
-    console.log('todoList --- ', todoList);
-    console.groupEnd();
-    const todoListUl = document.querySelector('.todo-list');
-    todoListUl.innerHTML = '';
+    warning('--- add ( "내용" )');
+    warning('--- remove ( id )');
+    warning('--- edit ( id, "내용" )');
+    warning('--- toggle ( id )');
+    console.groupEnd();         
   }
-
-  const render = () => {
-    let i = 0;
-    let MAX = Object.keys(todoList).length;
-    const targetEle = document.querySelector('.todo-list');
-    init();
-    for (i; i < MAX; i++) {
-      if (todoList.hasOwnProperty(id)) {
-        targetEle.innerHTML += todoList[i] === 'success'
-        ?`<li>${todoList[i].id}  ---  ${todoList[i].title}<span>O</span></li>`
-        :`<li>${todoList[i].id}  ---  ${todoList[i].title}</li>`;
-      }
-    }
+  const renderConsole = () => {
+    console.group('----  현재 TODO 상태  ----');
+    warning(todoList);
+    console.groupEnd();
   }
  
   const addList = (() => {
     let id = 0;
-
     return (title) => {
       if (!title) return Error('Todo에 Title이 비어있습니다. 추가해주세요!');
       todoList = {
@@ -45,46 +30,44 @@ const todoInit = (() => {
           status: STATE_P
         },
       }
-      id++;
-      render();      
+      id++;    
+      renderConsole();      
     }
   })();
   
-  const toggleTodo = (id) => {
+  const changeTodoProgress = (id) => {
     if (!todoList.hasOwnProperty(id)) return Error('상태를 변경할 Todo가 없습니다.');
-    todoList[id].status = todoList[id].status === STATE_P 
+    todoList[id].status = todoList[id].status === STATE_P
       ? STATE_C
       : STATE_P;
-    render();
+      renderConsole();
     return todoList;
   }
 
-  const deleteTodo = (id) => {
+  const deleteTodoItem = (id) => {
     if (!todoList.hasOwnProperty(id)) return Error('삭제할 Todo가 없습니다.');
     delete todoList[id];
-    render();
+    renderConsole();
     return todoList;
   };
 
-  const editTodo = (id, title) => {
-    if (!todoList.hasOwnProperty(id)) return Error('변경할 Todo가 없습니다.');
-    const newTitle = title;
+  const editTodoItem = (id, newTitle) => {    
+    if (!todoList.hasOwnProperty(id) || !newTitle) return Error('변경할 Todo가 없습니다.');
     todoList[id].title = newTitle;
-    render();
+    renderConsole();
     return todoList;
   };
 
   return {
     init: init,
     add: addList,
-    change: toggleTodo,
-    remove: deleteTodo,
-    edit: editTodo,
-    render: render,
+    toggle: changeTodoProgress,
+    remove: deleteTodoItem,
+    edit: editTodoItem,    
   }
 })();
 
-const todoEventInit = (() => {
+const todoEvent = (() => {
   let showCreatePop = false;
 
   class EventBindEle {
@@ -119,5 +102,6 @@ const todoEventInit = (() => {
     }
   }
 })();
-todoEventInit.init();
-todoInit.init();
+
+todoEvent.init();
+todo.init();
