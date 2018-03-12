@@ -15,27 +15,46 @@
         <h1>TODO</h1>
       </header>
       <article class="todo-list-wrap">
-        <ul class="todo-list">
-          <li class="todo-list-li"></li>
-        </ul>
+        <section>
+          <h1>할일</h1>
+          <ul class="progress">
+            <li>
+              <p>할일</p>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h1>완료</h1>
+          <ul class="complete">
+            <li>
+              <p>완료</p>
+            </li>
+          </ul>
+        </section>
+
       </article>
     </section>
     <section class="todo-btn-wrap">
       <button class="create-todo">Create Todo</button>
-      <button class="change-mode-todo">Change Mode</button>
+      <button class="change-todo-mode">Todo 출력 모드 체인지</button>
       <div class="create-todo-pop">
         <div class="close-create-pop">X</div>
-        <form action="" class="create-todo-form">
-          <fieldset>
-            <legend class="create-todo-title">TODO 작성!</legend>
-              <label>Title</label>
-              <input type="text" size="20" max="20" id="create-todo-input">
-              <input type="submit">
-          </fieldset>
-        </form>
+        <article class="create-todo-form">
+          <h1 class="create-todo-title">TODO 작성!</h1>
+
+          <label>Title</label>
+          <input type="text" id="create-todo-input">
+          <button class="add">Todo 작성</button>
+          <button class="remove">Todo 삭제</button>
+          <button class="toggle">Todo 상태 토글</button>
+        </article>
       </div>
     </section>
   </div>
+  <script src="./js/renderer.js"></script>
+  <script src="./js/createTodo.js"></script>
+  <script src="./js/con.js"></script>
+  <script src="./js/html.js"></script>
   <script src="./js/todo.js"></script>
 </body>
 </html>

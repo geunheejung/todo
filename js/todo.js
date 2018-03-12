@@ -1,23 +1,22 @@
-const todo = (() => {  
+const STATE = (function () {
+  const p = { toString: () => { return 'progress'; } };
+  const c = { toString: () => { return 'complete' } };
+
+  return {
+    PROGRESS: () => { return p; },
+    COMPLETE: () => { return c; }
+  }
+})();
+const warning = console.log;
+
+const todo = (() => {
   let todoList = {};
-  const STATE_P = 'progress';
-  const STATE_C = 'success';
-  const warning = (text) => console.log(text);
-  
-  const init = (mode) => {
-    console.group('TODO 명령어 모음');
-    warning('--- add ( "내용" )');
-    warning('--- remove ( id )');
-    warning('--- edit ( id, "내용" )');
-    warning('--- toggle ( id )');
-    console.groupEnd();         
-  }
-  const renderConsole = () => {
-    console.group('----  현재 TODO 상태  ----');
-    warning(todoList);
-    console.groupEnd();
-  }
- 
+  let target;
+
+  const render = () => {
+    target.render(Object.assign(todoList));
+  };
+
   const addList = (() => {
     let id = 0;
     return (title) => {
@@ -27,81 +26,50 @@ const todo = (() => {
         [id]: {
           id,
           title,
-          status: STATE_P
+          status: STATE.PROGRESS()
         },
-      }
-      id++;    
-      renderConsole();      
+      };
+      id++;
+      render();
     }
   })();
-  
-  const changeTodoProgress = (id) => {
-    if (!todoList.hasOwnProperty(id)) return Error('상태를 변경할 Todo가 없습니다.');
-    todoList[id].status = todoList[id].status === STATE_P
-      ? STATE_C
-      : STATE_P;
-      renderConsole();
-    return todoList;
-  }
 
-  const deleteTodoItem = (id) => {
-    if (!todoList.hasOwnProperty(id)) return Error('삭제할 Todo가 없습니다.');
-    delete todoList[id];
-    renderConsole();
-    return todoList;
+  const changeTodoStatus = (id) => {
+    if (!todoList.hasOwnProperty(id)) return Error('상태를 변경할 Todo가 없습니다.');
+    todoList[id].status = todoList[id].status === STATE.PROGRESS()
+      ? STATE.COMPLETE()
+      : STATE.PROGRESS();
+    render();
   };
 
   const editTodoItem = (id, newTitle) => {    
     if (!todoList.hasOwnProperty(id) || !newTitle) return Error('변경할 Todo가 없습니다.');
     todoList[id].title = newTitle;
-    renderConsole();
-    return todoList;
+    render();
+  };
+
+  const deleteTodoItem = (id) => {
+    if (!todoList.hasOwnProperty(id)) return Error('삭제할 Todo가 없습니다.');
+    delete todoList[id];
+    render();
   };
 
   return {
-    init: init,
+    setRenderer: (renderer) => {
+      if (!(renderer instanceof Renderer));
+      target = renderer;
+      renderer.init(todo);
+    },
     add: addList,
-    toggle: changeTodoProgress,
+    toggle: changeTodoStatus,
     remove: deleteTodoItem,
     edit: editTodoItem,    
   }
 })();
 
-const todoEvent = (() => {
-  let showCreatePop = false;
 
-  class EventBindEle {
-    constructor(target, viewEle) {
-      this.eventTarget = document.querySelector(target);
-      this.viewEle = document.querySelector(viewEle);
-    }
-  }
 
-  const toggleCreatePop = () => {
-    const initEle = new EventBindEle('.create-todo', '.create-todo-pop');
-    if (!(initEle instanceof EventBindEle)) return Error('createPopUp Target is Not EventBindEle instacne');
-    initEle.eventTarget.addEventListener('click', () => {
-      showCreatePop = true;
-      initEle.viewEle.classList.add('on-pop');
-    });
-  }
 
-  const toggleCloseBtn = () => {
-    const initEle = new EventBindEle('.close-create-pop', '.create-todo-pop');
-    if (!(initEle instanceof EventBindEle)) return Error('createPopUp Target is Not EventBindEle instacne');
-    initEle.eventTarget.addEventListener('click', () => {
-      showCreatePop = false;
-      initEle.viewEle.classList.remove('on-pop');
-    });
-  }
-
-  return {
-    init: function() {
-      toggleCreatePop();
-      toggleCloseBtn();
-    }
-  }
-})();
 
 todoEvent.init();
-todo.init();
+todo.setRenderer(html);
